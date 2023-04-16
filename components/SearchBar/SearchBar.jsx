@@ -11,15 +11,27 @@ import {
   Button,
   ToastAndroid,
   ActivityIndicator,
+  SafeAreaView,
+  Row,
+  Column,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { NotifPane } from "../NotifiPane/NotifPane";
 // import { useRouter } from "expo-router";
 // import { userNameValid } from "../../util/backend";
 // import { reLoadUsers } from "../UserList/UserList";
+// import { COLORS, FONT, SIZES } from "../../../constants";
 
-const SearchBar = ({ refresh, setRefresh }) => {
+const SearchBar = ({ refresh, setRefresh, isActive, setActive }) => {
   const [userName, onChangeText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  function showToast(msg) {
+    ToastAndroid.show(msg, ToastAndroid.SHORT);
+  }
+  useEffect(() => {
+    showToast("SRCH BAR", isActive.toString());
+  }, []);
 
   function showToast(msg) {
     ToastAndroid.show(msg, ToastAndroid.SHORT);
@@ -109,24 +121,33 @@ const SearchBar = ({ refresh, setRefresh }) => {
   };
 
   const userAddRoutine = async (userName) => {
-    const chk = await userNameValid(userName);
-    if (chk) {
-      const response = await getUserData(userName);
-      console.log("RESPONSE RECEIVED");
-      if (response !== null) {
-        userData = {
-          realName: response["data"]["matchedUser"]["profile"]["realName"],
-          userAvatar: response["data"]["matchedUser"]["profile"]["userAvatar"],
-          notifStatus: true,
-        };
-        console.log(userData);
-        await appendUserList(userName, userData);
-        console.log("USER ADDED", userName);
+    try {
+      setIsLoading(true);
+      const chk = await userNameValid(userName);
+      if (chk) {
+        const response = await getUserData(userName);
+        console.log("RESPONSE RECEIVED");
+        if (response !== null) {
+          userData = {
+            realName: response["data"]["matchedUser"]["profile"]["realName"],
+            userAvatar:
+              response["data"]["matchedUser"]["profile"]["userAvatar"],
+            notifStatus: true,
+          };
+          console.log(userData);
+          await appendUserList(userName, userData);
+          console.log("USER ADDED", userName);
+        } else {
+          console.log("error in BIO fetch data");
+        }
       } else {
-        console.log("error in BIO fetch data");
+        console.log("INVALID USER");
+        alert(`Invalid Username - ${userName}`);
       }
-    } else {
-      console.error("INVALID USER");
+    } catch (e) {
+      alert("ERROR IN ADDING ", userName);
+    } finally {
+      setIsLoading(false);
     }
   };
   const userNameValid = async (userName) => {
@@ -173,19 +194,73 @@ const SearchBar = ({ refresh, setRefresh }) => {
   };
 
   function addUser() {
-    setIsLoading(true);
+    // setIsLoading(true);
 
     console.log(userName);
-      userAddRoutine(userName).then(() => {
+    userAddRoutine(userName).then(() => {
       setRefresh((refersh) => !refersh);
     });
 
-    setIsLoading(false);
+    // setIsLoading(false);
   }
+
   return (
     <View>
-      
-      <TextInput
+      <View style={styles.header}>
+        <View
+          style={
+            {
+              // width: "100%",
+              // marginTop: 15,
+              // marginLeft: 15,
+              marginRight: 15,
+            }
+          }
+        >
+          <Text style={styles.userName}>Hello Leetcoders;</Text>
+          <Text style={styles.welcomeMessage}>
+            Track your friend's Submissions
+          </Text>
+        </View>
+        {/* <View> */}
+        <TouchableOpacity style={styles.infoBtn} onPress={addUser}>
+          {/* <Text>ADD</Text> */}
+          <Image source={require('../../assets/icon.png')} resizeMode='contain' style={{flex:.9 }} />
+
+        {/* <Image source={{ uri: '../../assets/icon.png'  }}/> */}
+        </TouchableOpacity>
+        {/* </View> */}
+      </View>
+
+      <SafeAreaView>
+        {/* <Row>
+          <Column>
+            <Text>Enter the username below,</Text>
+          </Column>
+          <Column>
+            <Text>Click 'Add' to add the user</Text>
+          </Column>
+        </Row> */}
+        <NotifPane isActive={isActive} setActive={setActive} />
+      </SafeAreaView>
+      <View style={styles.searchContainer}>
+        <View style={styles.searchWrapper}>
+          <TextInput
+            style={styles.searchInput}
+            value={userName}
+            onChangeText={onChangeText}
+            placeholder="username"
+          />
+        </View>
+        {isLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <TouchableOpacity style={styles.searchBtn} onPress={addUser}>
+            <Text style={{color:"ivory"}}>ADD</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+      {/* <TextInput
         // style={styles.input}
         placeholder="enter userid"
         // keyboardType="alphanumeric"
@@ -194,45 +269,131 @@ const SearchBar = ({ refresh, setRefresh }) => {
       />
       <TouchableOpacity onPress={addUser}>
         <Text>USED ADD</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
-  //   <View style={styles.searchContainer}>
-  //   <View style={styles.searchWrapper}>
-  //   <Text>SearchBar</Text>
-  //     {isLoading ? <ActivityIndicator /> : null}
-  //     <TextInput
-  //       style={styles.searchInput}
-  //       value={userName}
-  //       // onChangeText={(text) => setSearchTerm(text)}
-  //       placeholder="username"
-  //     />
-  //   </View>
+    //   <View style={styles.searchContainer}>
+    //   <View style={styles.searchWrapper}>
+    //   <Text>SearchBar</Text>
+    //     {isLoading ? <ActivityIndicator /> : null}
+    //     <TextInput
+    //       style={styles.searchInput}
+    //       value={userName}
+    //       // onChangeText={(text) => setSearchTerm(text)}
+    //       placeholder="username"
+    //     />
+    //   </View>
 
-  //   <TouchableOpacity style={styles.searchBtn} onPress={addUser}>
-  //     <Image
-  //       // source={icons.search}
-  //       resizeMode="contain"
-  //       style={styles.searchBtnImage}
-  //     />
-  //   </TouchableOpacity>
-  // </View>
+    //   <TouchableOpacity style={styles.searchBtn} onPress={addUser}>
+    //     <Image
+    //       // source={icons.search}
+    //       resizeMode="contain"
+    //       style={styles.searchBtnImage}
+    //     />
+    //   </TouchableOpacity>
+    // </View>
   );
 };
 
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     marginTop: StatusBar.currentHeight || 0,
+//   },
+//   item: {
+//     backgroundColor: "#f9c2ff",
+//     padding: 20,
+//     marginVertical: 8,
+//     marginHorizontal: 16,
+//   },
+//   title: {
+//     fontSize: 32,
+//   },
+// });
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
+  // container: {
+  //   width: "100%",
+  //   marginTop: "15px",
+  // },
+  logo: {
+    height: 100,
+    width: 100,
+    // borderRadius: 100,
+    // marginRight: 100,
   },
-  item: {
-    backgroundColor: "#f9c2ff",
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+  userName: {
+    fontFamily: "DMRegular",
+    fontSize: 24,
+    color: "#444262",
   },
-  title: {
+  welcomeMessage: {
+    fontFamily: "DMBold",
     fontSize: 32,
+    color: "#312651",
+    marginTop: 2,
   },
+  searchContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    marginTop: 20,
+    marginLeft: 15,
+    marginRight: 15,
+    height: 50,
+  },
+  header: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    // padding
+    backgroundColor: "#00000",
+    marginTop: 20,
+    marginLeft: 15,
+    marginRight: 15,
+    marginBottom: 50,
+    height: 50,
+  },
+  searchWrapper: {
+    flex: 1,
+    backgroundColor: "#F3F4F8",
+    marginRight: 12,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 14,
+    height: "100%",
+  },
+  searchInput: {
+    fontFamily: "DMRegular",
+    width: "100%",
+    height: "100%",
+    paddingHorizontal: 16,
+  },
+  searchBtn: {
+    // color:"ivory",
+    width: 50,
+    height: "100%",
+    backgroundColor: "#4b9c4f",
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  infoBtn: {
+    width: 60,
+    height: 60,
+    // backgroundColor: "#00000",
+    borderColor:"#fffff",
+    borderWidth:1,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  searchBtnImage: {
+    width: "50%",
+    height: "50%",
+    tintColor: "#F3F4F8",
+  },
+  // instructionList: {
+  //   paddingTop: "20px",
+  // },
 });
 
 // const styles = StyleSheet.create({

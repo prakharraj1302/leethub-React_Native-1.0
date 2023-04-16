@@ -7,14 +7,14 @@
     "name": "leethub-2",
     "slug": "leethub-0-1",
     "notification": {
-      "icon": "./assets/leet_logo_2.png"
+      "icon": "./assets/icon.png"
     },
     "plugins": [
       [
         "expo-notifications",
         {
-          "icon": "./assets/leet_logo_2.png",
-          "color": "#ffffff"
+          "icon": "./assets/icon.png",
+          "color": "#fff4c0"
         }
       ]
     ],

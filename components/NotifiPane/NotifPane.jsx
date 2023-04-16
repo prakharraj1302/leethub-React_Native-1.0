@@ -131,6 +131,7 @@ const NotifPane = ({ isActive, setActive }) => {
   }
 
   const register = () => {
+    console.log("TASK REGISTERING");
     registerForPushNotificationsAsync().then((token) =>
       setExpoPushToken(token)
     );
@@ -145,21 +146,21 @@ const NotifPane = ({ isActive, setActive }) => {
         console.log(response);
       });
 
+    checkStatusAsync();
     return () => {
       Notifications.removeNotificationSubscription(
         notificationListener.current
       );
       Notifications.removeNotificationSubscription(responseListener.current);
     };
-    checkStatusAsync();
   };
   async function schedulePushNotification(data) {
     console.log("schedule notif - start");
     console.log("DAAT ISSUEED -", data);
     await Notifications.scheduleNotificationAsync({
       content: {
-        title: `👤 ${data["realName"]}`,
-        body: `Latest 🗞️ ${data["title"]} \n Today's #️⃣ ${data["subb"]}`,
+        title: `👤${data["userName"]}`,
+        body: `📄Latest Submission -${data["title"]} | 🟩Total  = ${data["subb"]}`,
         // body: {JSON.stringify(data)},
         data: { data: data["subb"] },
       },
@@ -169,10 +170,10 @@ const NotifPane = ({ isActive, setActive }) => {
 
   const toggleFetchTask = async () => {
     if (isActive) {
-      alert("dead");
+      // alert("dead");
       await unregisterBackgroundFetchAsync();
     } else {
-      alert("alive");
+      // alert("alive");
       await registerBackgroundFetchAsync();
     }
     checkStatusAsync();
@@ -182,17 +183,41 @@ const NotifPane = ({ isActive, setActive }) => {
     const isActive = await TaskManager.isTaskRegisteredAsync(
       BACKGROUND_FETCH_TASK
     );
-    console.log(isActive);
 
     // setStatus(status);
     setActive(isActive);
+    console.log("TOGGLED -", isActive);
   };
 
   //-------------------------//-------------------------//-------------------------
   useEffect(() => {
-    register();
+    async function asyncregister() {
+      register();
+      // .then(toggleFetchTask());
+    }
+
+    // register();
+    asyncregister();
+    // try{
+    //   toggleFetchTask();
+    // }catch(e){
+    //   console.error(e);
+    // }
+    // toggleFetchTask();
+    getAllKeys();
   }, []);
   //-------------------------//-------------------------//-------------------------
+
+  const getAllKeys = async () => {
+    let keys = [];
+    try {
+      keys = await AsyncStorage.getAllKeys();
+    } catch (e) {
+      console.log("KEY ERROR ", e);
+    }
+    console.log(keys);
+    showToast(keys.toString());
+  };
   const getSubbData = async (userName) => {
     console.log("GET SUBB");
     var myHeaders = new Headers();
@@ -238,7 +263,7 @@ const NotifPane = ({ isActive, setActive }) => {
     } catch (e) {
       // error reading value
       console.log(e);
-      alert("error ");
+      alert("error ", e);
       return null;
     }
     return subbData;
@@ -258,7 +283,7 @@ const NotifPane = ({ isActive, setActive }) => {
     } catch (e) {
       // error reading value
       console.log(e);
-      alert("error ");
+      alert("error ", e);
       return null;
     }
     return userData;
@@ -366,27 +391,35 @@ const NotifPane = ({ isActive, setActive }) => {
   const updateUserSubbList = async (userName, json) => {
     console.log("updateUserSubbList");
     var list = null;
+    var loadData = null;
     try {
-      const value = await AsyncStorage.getItem("@UserSubbList");
-      if (value !== null) {
-        console.log("existing---SUBB");
-        // value previously stored
-        // const jsonData = JSON.parse(value);
-        console.log("JSON SUBB DATA", value);
-        list = value;
-        // return value;
-      } else {
+      loadData = await AsyncStorage.getItem("@UserSubbList");
+      console.log("JSON SUBB DATA", loadData);
+      if (
+        loadData === null ||
+        loadData == null ||
+        loadData === "" ||
+        loadData === undefined ||
+        loadData === "null"
+      ) {
         // console.log('NULL SUBBLIST' , value);
         console.log("initial---SUBB");
         const jsonTemplate = `{\"userSubbList\":{}}`;
         //  JSON.stringify({ userSubbList: { userName: {} } });
         list = jsonTemplate;
         console.log("templateSubb", list);
+      } else {
+        // vulnerable
+        console.log("existing SUBB");
+        // value previously stored
+        // const jsonData = JSON.parse(value);
+        list = loadData;
+        // return value;
       }
     } catch (e) {
       // error reading value
       console.log("NULLL", e);
-      alert("error ");
+      alert("error ", e);
       return null;
     }
     console.log("UPDATE");
@@ -401,9 +434,11 @@ const NotifPane = ({ isActive, setActive }) => {
         // userSubb[userName][subbId] = json;
         if (list["userSubbList"][userName]) {
           list["userSubbList"][userName] = json;
+          console.log("adding new subb to", userName);
         } else {
           list["userSubbList"][userName] = {};
           list["userSubbList"][userName] = json;
+          console.log("adding INIT subb to", userName);
         }
       }
       // console.log("USER SUBB -", userSubb);
@@ -431,7 +466,17 @@ const NotifPane = ({ isActive, setActive }) => {
         console.log(user);
         const response = await getSubbData(user);
         if (response !== null) {
-          subbData = response["data"]["recentAcSubmissionList"][0];
+          var subbData = null;
+          if (
+            response["data"]["recentAcSubmissionList"][0] != null &&
+            response["data"]["recentAcSubmissionList"][0] != undefined
+          ) {
+            subbData = response["data"]["recentAcSubmissionList"][0];
+          } else {
+            console.log("error");
+            continue;
+          }
+          // subbData = response["data"]["recentAcSubmissionList"][0];
           const subb = await todaySubb(user);
 
           console.log(subb);
@@ -579,41 +624,59 @@ const NotifPane = ({ isActive, setActive }) => {
       try {
         const users = userData["userData"];
         console.log("users", users);
-        
-        const lastUnix =
-            await getLastFetchUnix();
+
+        const lastUnix = await getLastFetchUnix();
 
         for (user in users) {
           console.log(user);
-          const notify = userData["userData"][user]["notifStatus"];
-          const realName = userData["userData"][user]["realName"];
-          const userAvatar = userData["userData"][user]["userAvatar"];
+          var notify = null;
+          var realName = null;
+          var userAvatar = null;
+          var subb = null;
+          var title = null;
+          var titleSlug = null;
+          var timestamp = null;
+          if (
+            userSubbList["userSubbList"][user] != undefined &&
+            userSubbList["userSubbList"][user]["totalSubbToday"] != undefined
+          ) {
+            notify = userData["userData"][user]["notifStatus"];
+            realName = userData["userData"][user]["realName"];
+            userAvatar = userData["userData"][user]["userAvatar"];
 
-          const subb = userSubbList["userSubbList"][user]["totalSubbToday"];
-          const title = userSubbList["userSubbList"][user]["title"];
-          const titleSlug = userSubbList["userSubbList"][user]["titleSlug"];
-          const timestamp = userSubbList["userSubbList"][user]["timestamp"];
+            subb = userSubbList["userSubbList"][user]["totalSubbToday"];
+            title = userSubbList["userSubbList"][user]["title"];
+            titleSlug = userSubbList["userSubbList"][user]["titleSlug"];
+            timestamp = userSubbList["userSubbList"][user]["timestamp"];
+          } else {
+            console.log("INVALID USER DATA", user);
+          }
 
-            // 1680757006;
+          // 1680757006;
 
-          if (notify) {
-            console.log("notif", user);
-            if (timestamp > lastUnix) {
-              console.log(timestamp, lastUnix);
-              const notifData = {
-                realName: realName,
-                userAvatar: userAvatar,
-                subb: subb,
-                title: title,
-              };
-              console.log("nofi data added for = ", user);
-              notifJson["notificationList"][user] = notifData;
-            } else {
-              console.log(timestamp, lastUnix);
-              console.log("no update > time");
+          console.log("notif", user, notify);
+          if (notify !== null) {
+            if (notify) {
+              if (timestamp > lastUnix) {
+                console.log(timestamp, lastUnix);
+                const notifData = {
+                  userName: user,
+                  realName: realName,
+                  userAvatar: userAvatar,
+                  subb: subb,
+                  title: title,
+                };
+                console.log("nofi data added for = ", user);
+                notifJson["notificationList"][user] = notifData;
+              } else {
+                console.log(timestamp, lastUnix);
+                console.log("no update > time");
+              }
+            }else{
+              console.log("TURNED OFF ");
             }
           } else {
-            console.log("no update");
+            console.log("ERROR - no update");
           }
           // "title": "Search Insert Position",
           // "titleSlug": "search-insert-position",
@@ -634,7 +697,7 @@ const NotifPane = ({ isActive, setActive }) => {
   };
   return (
     <View>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => {
           showToast(isActive.toString());
           //   checkStatusAsync();
@@ -644,8 +707,68 @@ const NotifPane = ({ isActive, setActive }) => {
         }}
       >
         <Text>NOTIFICATION</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <TouchableOpacity
+        onPress={() => {
+          toggleFetchTask();
+          setActive((isActive) => !isActive);
+          showToast(`NOTIFICATION ${isActive.toString()}`);
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 14,
+            paddingLeft: 15,
+            backgroundColor: "#4b9c4f",
+            padding: 10,
+            // margin: 20,
+            marginTop: 10,
+            marginLeft: 15,
+            marginRight: 15,
+            borderRadius: 100,
+            textAlign: "center",
+          }}
+        >
+          {/* <Text
+            style={{
+              color: "ivory",
+              textAlign:"center",
+            }}
+          >
+            NOTIFY
+          </Text> */}
+          <Text
+            style={{
+              color: "ivory",
+              // textAlign: "center",
+            }}
+          >
+            {isActive ? (
+              <Text
+                style={{
+                  color: "ivory",
+                  textAlign: "center",
+                }}
+              >
+                NOTIFICATION ON
+              </Text>
+            ) : (
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  color: "ivory",
+                  textAlign: "center",
+                  // backgroundColor:"gray"
+                  // backgroundColor:"#"
+                }}
+              >
+                OFF
+              </Text>
+            )}
+          </Text>
+        </Text>
+      </TouchableOpacity>
+      {/* <TouchableOpacity
         onPress={() => {
           showToast("NULL KEYS");
 
@@ -665,7 +788,7 @@ const NotifPane = ({ isActive, setActive }) => {
         }}
       >
         <Text>NULL KESY</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };

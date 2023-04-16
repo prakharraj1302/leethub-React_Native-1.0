@@ -1,30 +1,32 @@
-// import { Stack } from "expo-router";
-// import { useFonts } from "expo-font";
-// // import * as SplashScreen from "expo-splash-screen";
+import { Stack } from "expo-router";
+import { useFonts } from "expo-font";
+import Home from "./home";
+// import * as SplashScreen from "expo-splash-screen";
 
-// // SplashScreen.preventAutoHideAsync();
+// SplashScreen.preventAutoHideAsync();
 
-// export const unstable_settings = {
-//   // Ensure any route can link back to `/`
-//   initialRouteName: "home",
-// };
+export const unstable_settings = {
+  // Ensure any route can link back to `/`
+  initialRouteName: "home",
+};
 
-// const Layout = () => {
-//   const [fontsLoaded] = useFonts({
-//     DMBold: require("../assets/fonts/DMSans-Bold.ttf"),
-//     DMMedium: require("../assets/fonts/DMSans-Medium.ttf"),
-//     DMRegular: require("../assets/fonts/DMSans-Regular.ttf"),
-//   });
+const Layout = () => {
+  const [fontsLoaded] = useFonts({
+    DMBold: require("../assets/fonts/DMSans-Bold.ttf"),
+    DMMedium: require("../assets/fonts/DMSans-Medium.ttf"),
+    DMRegular: require("../assets/fonts/DMSans-Regular.ttf"),
+  });
 
-//   if (!fontsLoaded) {
-//     return null;
-//   }
+  if (!fontsLoaded) {
+    return null;
+  }
 
-//   return (
-//     <Stack initialRouteName="home">
-//       <Stack.Screen name="home" />
-//     </Stack>
-//   );
-// };
+  return (
+    // <Stack screenOptions={{ headerShown: false }} initialRouteName="home">
+    //   <Stack.Screen name="home" />
+    // </Stack>
+    <Home/>
+  );
+};
 
-// export default Layout;
+export default Layout;

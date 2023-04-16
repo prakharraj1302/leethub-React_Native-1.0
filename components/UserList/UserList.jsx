@@ -21,6 +21,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { ScrollView } from "react-native-gesture-handler";
 // import { userDataLoad, deleteUser } from "../../util/userDataLoad";
 
+const AVATAR_SIZE = 70;
+const SPACING = 20;
+const ITEM_SIZE = AVATAR_SIZE + SPACING * 3;
+
 // const reLoadUsers = () => {
 //   setIsLoading(true);
 //   loadUsers();
@@ -73,8 +77,8 @@ const UserList = ({ refresh, setRefresh }) => {
     var userData = null;
     try {
       const value = await AsyncStorage.getItem("@UserList");
-      // if (value !== null) {
-      if (true) {
+      if (value !== null) {
+      // if (true) {
         // value previously stored
         const jsonData = JSON.parse(value);
 
@@ -104,7 +108,7 @@ const UserList = ({ refresh, setRefresh }) => {
     } catch (e) {
       // error reading value
       console.log(e);
-      alert("error ");
+      alert("error ", e);
       return null;
     } finally {
       setIsLoading(false);
@@ -120,7 +124,7 @@ const UserList = ({ refresh, setRefresh }) => {
     //   console.log(u);
     //   // newJson['userData'][u[userName]] = {realName : realName , userAvatar: userAvatar}
     // }
-    if(uiList != null){
+    if (uiList != null) {
       for (i = 0; i < uiList.length; i++) {
         console.log(uiList[i]);
         newJson["userData"][uiList[i]["userName"]] = {
@@ -172,49 +176,127 @@ const UserList = ({ refresh, setRefresh }) => {
 
   const ItemView = ({ item }) => (
     // <View style={styles.item}>
-    <TouchableWithoutFeedback>
-      <View style={styles.item}>
-        <Text style={styles.title}>{item.realName}</Text>
-        <Text style={styles.subTitle}>{item.userName}</Text>
+
+    // <TouchableWithoutFeedback>
+    <View
+      // style={styles.item}
+      style={styles.itemView}
+    >
+      <Image
+        style={{
+          height: AVATAR_SIZE,
+          width: AVATAR_SIZE,
+          borderRadius: AVATAR_SIZE,
+          marginRight: SPACING,
+        }}
+        source={{ uri: item.userAvatar }}
+      />
+      <View style={{ flexDirection: "column" }}>
+        <Text style={styles.heading}>{item.realName}</Text>
+        <Text style={styles.subHeading}>{item.userName}</Text>
         {/* {item.notifStatus ? <Text>YES</Text> : <Text>NO</Text>} */}
-        <Button
-          onPress={() => {
-            console.log(item.userName);
-            deleteUser(item.userName);
+        <View
+          style={{
+            flexDirection: "row",
+            paddingLeft: 5,
+            paddingTop: 10,
           }}
-          title="DELETE"
-        />
-        <Button
-          onPress={() => {
-            console.log(item.userName);
-            toggleNotif(item.userName);
-          }}
-          title="NOTIF"
-        />
+        >
+          <TouchableOpacity
+            onPress={() => {
+              toggleNotif(item.userName);
+            }}
+          >
+              {item.notifStatus ? (
+                <Text
+                  style={{
+                    width:100,
+                    color: "ivory",
+                    backgroundColor: "#4b9c4f",
+                    fontWeight: "bold",
+                    padding: 10,
+                    borderRadius: 100,
+                    position: "relative",
+                    textAlign:"center",
+                  }}
+                >
+                  Notify
+                </Text>
+              ) : (
+                <Text
+                  style={{
+                    width:100,
+                    color: "black",
+                    backgroundColor: "gray",
+                    padding: 10,
+                    borderRadius: 100,
+                    opacity: 0.5,
+                    textAlign:"center",
+                  }}
+                >
+                  Notify
+                </Text>
+              )}
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              console.log(item.userName);
+              deleteUser(item.userName);
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 14,
+                paddingLeft: 15,
+                backgroundColor: "red",
+                fontWeight: "bold",
+                padding: 10,
+                // margin: 20,
+                marginLeft: 15,
+                borderRadius: 100,
+
+                // padding: 30,
+                // borderRadius: 30
+              }}
+            >
+              <Text
+                style={{
+                  // color: "black",
+                  // backgroundColor: "#444978",
+                  // padding: SPACING,
+                  // paddingBottom: 20,
+                  // margin: 10,
+                  // borderRadius: 10,
+                  // position: "relative",
+                  color: "ivory",
+                }}
+              >
+                Delete
+              </Text>
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </TouchableWithoutFeedback>
+    </View>
+    // </TouchableWithoutFeedback>
   );
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <ScrollView> */}
-      <Text>----USERLIST------</Text>
-      <TouchableOpacity onPress={reLoadUsers}>
+      {/* <TouchableOpacity onPress={reLoadUsers}>
         <Text>REFRESH</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       {isLoading ? (
         <ActivityIndicator />
       ) : (
-        // <ScrollView>
         <FlatList
+          contentContainerStyle={{ paddingTop:0, paddingBottom:550, padding: SPACING }}
           data={data}
           keyExtractor={(item, index) => index.toString()}
           enableEmptySections={true}
           renderItem={ItemView}
         />
-        // {/* </ScrollView> */}
       )}
-      {/* </ScrollView> */}
     </SafeAreaView>
   );
 };
@@ -236,6 +318,82 @@ const styles = StyleSheet.create({
   subTitle: {
     fontSize: 20,
   },
+  heading: {
+    fontSize: 22,
+    padding: 2,
+    // fontweight: "700",
+  },
+  subHeading: {
+    fontSize: 16,
+    opacity: 0.6,
+    padding: 3,
+  },
+  itemView: {
+    // backgroundColor: "#cbe38a",
+    flexDirection: "row",
+    padding: SPACING,
+    paddingTop: 20,
+    marginBottom: SPACING,
+    // margin: 20,
+    borderRadius: 50,
+    borderColor:"#fffff",
+    borderWidth:1,
+
+    // shadowColor: "#fffff",
+
+    // shadowOffset: {
+    //   width: 100,
+    //   height: 100,
+    // },
+    // shadowOpacity: 1,
+    // shadowRadius: 10,
+    // transform: [{ scale }],
+  },
 });
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: "center",
+//     backgroundColor: "#ecf0f1",
+//     padding: 0,
+//   },
+//   heading: {
+//     fontSize: 22,
+//     padding: "2px",
+//     // fontweight: "700",
+//   },
+//   subHeading: {
+//     fontSize: 16,
+//     opacity: 0.6,
+//     padding: "3px",
+//   },
+//   itemView: {
+//     backgroundColor: "#fff",
+//     flexDirection: "row",
+//     padding: SPACING,
+//     paddingTop: 20,
+//     marginBottom: SPACING,
+//     borderRadius: 15,
+//     shadowColor: "#f0fcf3",
+//     shadowOffset: {
+//       width: 0,
+//       height: 10,
+//     },
+//     shadowOpacity: 1,
+//     shadowRadius: 5,
+//     // transform: [{ scale }],
+//   },
+//   input: {
+//     height: 40,
+//     margin: 20,
+//     borderWidth: 1,
+//     padding: 10,
+//     borderRadius: 5,
+//     backgroundColor: "#00e8d",
+//   },
+//   FooterStyle: {
+//     alignItems: "center",
+//   },
+// });
 
 export { UserList };
