@@ -30,7 +30,7 @@ const SearchBar = ({ refresh, setRefresh, isActive, setActive }) => {
     ToastAndroid.show(msg, ToastAndroid.SHORT);
   }
   useEffect(() => {
-    showToast("SRCH BAR", isActive.toString());
+    // showToast("SRCH BAR", isActive.toString());
   }, []);
 
   function showToast(msg) {
@@ -180,7 +180,7 @@ const SearchBar = ({ refresh, setRefresh, isActive, setActive }) => {
       );
       const json = await response.json();
       if (json.hasOwnProperty("errors")) {
-        showToast("false");
+        // showToast("false");
         return false;
       }
       showToast("true");
