@@ -210,22 +210,26 @@ const UserList = ({ refresh, setRefresh }) => {
               {item.notifStatus ? (
                 <Text
                   style={{
-                    width:100,
+                    fontSize: 12,
+                    fontFamily: "DMRegular",
+                    width:"100%",
                     color: "ivory",
                     backgroundColor: "#4b9c4f",
-                    fontWeight: "bold",
+                    fontWeight: "900",
                     padding: 10,
                     borderRadius: 100,
                     position: "relative",
                     textAlign:"center",
                   }}
                 >
-                  Notify
+                  NOTIFY ON
                 </Text>
               ) : (
                 <Text
                   style={{
-                    width:100,
+                    fontSize: 12,
+                    fontFamily: "DMRegular",
+                    width:"100%",
                     color: "black",
                     backgroundColor: "gray",
                     padding: 10,
@@ -234,7 +238,7 @@ const UserList = ({ refresh, setRefresh }) => {
                     textAlign:"center",
                   }}
                 >
-                  Notify
+                  NOTIFY OFF
                 </Text>
               )}
           </TouchableOpacity>
@@ -246,10 +250,10 @@ const UserList = ({ refresh, setRefresh }) => {
           >
             <Text
               style={{
-                fontSize: 14,
+                fontSize: 12,
                 paddingLeft: 15,
                 backgroundColor: "red",
-                fontWeight: "bold",
+                fontWeight: "900",
                 padding: 10,
                 // margin: 20,
                 marginLeft: 15,
@@ -271,7 +275,7 @@ const UserList = ({ refresh, setRefresh }) => {
                   color: "ivory",
                 }}
               >
-                Delete
+                DELETE
               </Text>
             </Text>
           </TouchableOpacity>
@@ -319,11 +323,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   heading: {
+    fontFamily: "DMRegular",
     fontSize: 22,
     padding: 2,
     // fontweight: "700",
   },
   subHeading: {
+    fontFamily: "DMRegular",
     fontSize: 16,
     opacity: 0.6,
     padding: 3,

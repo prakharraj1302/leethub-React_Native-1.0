@@ -7,6 +7,7 @@ import { UserList } from "../components/UserList/UserList";
 import { useEffect, useState } from "react";
 import { NotifPane } from "../components/NotifiPane/NotifPane";
 import { register } from "../util/job";
+import {DrawerComponent} from "../components/Drawer/Drawer";
 // import {setActiveState}
 
 const Home = () => {
@@ -23,7 +24,7 @@ const Home = () => {
   useEffect(() => {
     setActiveState();
     // showToast('HOME BAR', isActive);
-    
+
     // register();
   }, []);
 
@@ -37,6 +38,7 @@ const Home = () => {
         isActive={isActive}
         setActive={setActive}
       />
+      {/* <DrawerComponent /> */}
       <UserList refresh={refresh} setRefresh={setRefresh} />
     </SafeAreaView>
   );

@@ -672,7 +672,7 @@ const NotifPane = ({ isActive, setActive }) => {
                 console.log(timestamp, lastUnix);
                 console.log("no update > time");
               }
-            }else{
+            } else {
               console.log("TURNED OFF ");
             }
           } else {
@@ -708,65 +708,50 @@ const NotifPane = ({ isActive, setActive }) => {
       >
         <Text>NOTIFICATION</Text>
       </TouchableOpacity> */}
-      <TouchableOpacity
+      <TouchableOpacity 
+        style={styles.notifyBox}
         onPress={() => {
           toggleFetchTask();
           setActive((isActive) => !isActive);
           showToast(`NOTIFICATION ${isActive.toString()}`);
         }}
       >
-        <Text
-          style={{
-            fontSize: 14,
-            paddingLeft: 15,
-            backgroundColor: "#4b9c4f",
-            padding: 10,
-            // margin: 20,
-            marginTop: 10,
-            marginLeft: 15,
-            marginRight: 15,
-            borderRadius: 100,
-            textAlign: "center",
-          }}
-        >
-          {/* <Text
-            style={{
-              color: "ivory",
-              textAlign:"center",
-            }}
-          >
-            NOTIFY
-          </Text> */}
+        {isActive ? (
           <Text
             style={{
+              width: "90%",
+              // marginLeft:15,
+              // marginRight:15,
+              fontFamily: "DMRegular",
               color: "ivory",
-              // textAlign: "center",
+              backgroundColor: "#4b9c4f",
+              fontWeight: "900",
+              padding: 10,
+              borderRadius: 100,
+              position: "relative",
+              textAlign: "center",
+              alignSelf:"center"
             }}
           >
-            {isActive ? (
-              <Text
-                style={{
-                  color: "ivory",
-                  textAlign: "center",
-                }}
-              >
-                NOTIFICATION ON
-              </Text>
-            ) : (
-              <Text
-                style={{
-                  fontWeight: "bold",
-                  color: "ivory",
-                  textAlign: "center",
-                  // backgroundColor:"gray"
-                  // backgroundColor:"#"
-                }}
-              >
-                OFF
-              </Text>
-            )}
+            NOTIFICATIONS ON
           </Text>
-        </Text>
+        ) : (
+          <Text
+            style={{
+              width: "90%",
+              fontFamily: "DMRegular",
+              color: "black",
+              backgroundColor: "gray",
+              padding: 10,
+              borderRadius: 100,
+              opacity: 0.5,
+              textAlign: "center",
+              alignSelf:"center"
+            }}
+          >
+            NOTIFICATIONS OFF
+          </Text>
+        )}
       </TouchableOpacity>
       {/* <TouchableOpacity
         onPress={() => {
@@ -792,4 +777,45 @@ const NotifPane = ({ isActive, setActive }) => {
     </View>
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor:"#fffff",
+    flex: 1,
+    padding: 100,
+
+  },
+  notifyBox:{
+    width:"100%",
+    // padding:10,
+    paddingTop:10,
+    // position:""
+    alignSelf:"center"
+
+  },
+  navigationContainer: {
+    backgroundColor: "#ecf0f1",
+  },
+  heading: {
+    fontSize: 24,
+    paddingTop: 15,
+    color: "blue",
+  },
+  paragraph: {
+    fontSize: 18,
+    padding: 5,
+    paddingTop: 10,
+  },
+  FooterStyle: {
+    width: 280,
+    backgroundColor: "#00de8d",
+    paddingTop: 10,
+    padding: 15,
+    alignSelf: "center",
+    borderRadius: 10,
+    marginTop: 50,
+  },
+  hyperlinkStyle: {
+    color: "blue",
+  },
+});
 export { NotifPane };
