@@ -105,7 +105,7 @@ const NotifPane = ({ isActive, setActive }) => {
   // Note: This does NOT need to be in the global scope and CAN be used in your React components!
   async function registerBackgroundFetchAsync() {
     return BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
-      minimumInterval: 10, // task will fire 1 minute after app is backgrounded
+      minimumInterval: 3600, // task will fire 1 minute after app is backgrounded
     });
   }
 
@@ -216,17 +216,17 @@ const NotifPane = ({ isActive, setActive }) => {
       console.log("KEY ERROR ", e);
     }
     console.log(keys);
-    showToast(keys.toString());
+    // showToast(keys.toString());
   };
   const getSubbData = async (userName) => {
     console.log("GET SUBB");
     var myHeaders = new Headers();
     myHeaders.append("referer", "https://leetcode.com/%s/votrubac");
     myHeaders.append("Content-Type", "application/json");
-    myHeaders.append(
-      "Cookie",
-      "csrftoken=2fh1J8fR3kqtgbptItZQ3tw7I92UAXxmW5VWQ5H5RkqLdEn83OI9Kn5IMCgrRz4Z"
-    );
+    // myHeaders.append(
+    //   "Cookie",
+    //   "csrftoken=2fh1J8fR3kqtgbptItZQ3tw7I92UAXxmW5VWQ5H5RkqLdEn83OI9Kn5IMCgrRz4Z"
+    // );
 
     var graphql = JSON.stringify({
       query:
@@ -293,10 +293,10 @@ const NotifPane = ({ isActive, setActive }) => {
     var myHeaders = new Headers();
     myHeaders.append("referer", "https://leetcode.com/%s/votrubac");
     myHeaders.append("Content-Type", "application/json");
-    myHeaders.append(
-      "Cookie",
-      "csrftoken=2fh1J8fR3kqtgbptItZQ3tw7I92UAXxmW5VWQ5H5RkqLdEn83OI9Kn5IMCgrRz4Z"
-    );
+    // myHeaders.append(
+    //   "Cookie",
+    //   "csrftoken=2fh1J8fR3kqtgbptItZQ3tw7I92UAXxmW5VWQ5H5RkqLdEn83OI9Kn5IMCgrRz4Z"
+    // );
 
     var graphql = JSON.stringify({
       query:
@@ -713,7 +713,7 @@ const NotifPane = ({ isActive, setActive }) => {
         onPress={() => {
           toggleFetchTask();
           setActive((isActive) => !isActive);
-          showToast(`NOTIFICATION ${isActive.toString()}`);
+          // showToast(`NOTIFICATION ${isActive.toString()}`);
         }}
       >
         {isActive ? (

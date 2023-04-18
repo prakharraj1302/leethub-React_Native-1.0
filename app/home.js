@@ -7,7 +7,7 @@ import { UserList } from "../components/UserList/UserList";
 import { useEffect, useState } from "react";
 import { NotifPane } from "../components/NotifiPane/NotifPane";
 import { register } from "../util/job";
-import {DrawerComponent} from "../components/Drawer/Drawer";
+import { DrawerComponent } from "../components/Drawer/Drawer";
 // import {setActiveState}
 
 const Home = () => {

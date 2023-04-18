@@ -43,10 +43,10 @@ const SearchBar = ({ refresh, setRefresh, isActive, setActive }) => {
     var myHeaders = new Headers();
     myHeaders.append("referer", "https://leetcode.com/%s/votrubac");
     myHeaders.append("Content-Type", "application/json");
-    myHeaders.append(
-      "Cookie",
-      "csrftoken=2fh1J8fR3kqtgbptItZQ3tw7I92UAXxmW5VWQ5H5RkqLdEn83OI9Kn5IMCgrRz4Z"
-    );
+    // myHeaders.append(
+    //   "Cookie",
+    //   "csrftoken=2fh1J8fR3kqtgbptItZQ3tw7I92UAXxmW5VWQ5H5RkqLdEn83OI9Kn5IMCgrRz4Z"
+    // );
 
     var graphql = JSON.stringify({
       query:
