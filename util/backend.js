@@ -311,10 +311,10 @@ async function getData() {
   var myHeaders = new Headers();
   myHeaders.append("referer", "https://leetcode.com/%s/votrubac");
   myHeaders.append("Content-Type", "application/json");
-  myHeaders.append(
-    "Cookie",
-    "csrftoken=2fh1J8fR3kqtgbptItZQ3tw7I92UAXxmW5VWQ5H5RkqLdEn83OI9Kn5IMCgrRz4Z"
-  );
+  // myHeaders.append(
+  //   "Cookie",
+  //   "csrftoken=2fh1J8fR3kqtgbptItZQ3tw7I92UAXxmW5VWQ5H5RkqLdEn83OI9Kn5IMCgrRz4Z"
+  // );
 
   var graphql = JSON.stringify({
     query:
@@ -395,10 +395,10 @@ const getCalendar = async (userName) => {
   var myHeaders = new Headers();
   myHeaders.append("referer", "https://leetcode.com/%s/votrubac");
   myHeaders.append("Content-Type", "application/json");
-  myHeaders.append(
-    "Cookie",
-    "csrftoken=2fh1J8fR3kqtgbptItZQ3tw7I92UAXxmW5VWQ5H5RkqLdEn83OI9Kn5IMCgrRz4Z"
-  );
+  // myHeaders.append(
+  //   "Cookie",
+  //   "csrftoken=2fh1J8fR3kqtgbptItZQ3tw7I92UAXxmW5VWQ5H5RkqLdEn83OI9Kn5IMCgrRz4Z"
+  // );
 
   var graphql = JSON.stringify({
     query:
@@ -602,10 +602,10 @@ const getSubbData = async (userName) => {
   var myHeaders = new Headers();
   myHeaders.append("referer", "https://leetcode.com/%s/votrubac");
   myHeaders.append("Content-Type", "application/json");
-  myHeaders.append(
-    "Cookie",
-    "csrftoken=2fh1J8fR3kqtgbptItZQ3tw7I92UAXxmW5VWQ5H5RkqLdEn83OI9Kn5IMCgrRz4Z"
-  );
+  // myHeaders.append(
+  //   "Cookie",
+  //   "csrftoken=2fh1J8fR3kqtgbptItZQ3tw7I92UAXxmW5VWQ5H5RkqLdEn83OI9Kn5IMCgrRz4Z"
+  // );
 
   var graphql = JSON.stringify({
     query:
@@ -792,10 +792,10 @@ const getUserData = async (userName) => {
   var myHeaders = new Headers();
   myHeaders.append("referer", "https://leetcode.com/%s/votrubac");
   myHeaders.append("Content-Type", "application/json");
-  myHeaders.append(
-    "Cookie",
-    "csrftoken=2fh1J8fR3kqtgbptItZQ3tw7I92UAXxmW5VWQ5H5RkqLdEn83OI9Kn5IMCgrRz4Z"
-  );
+  // myHeaders.append(
+  //   "Cookie",
+  //   "csrftoken=2fh1J8fR3kqtgbptItZQ3tw7I92UAXxmW5VWQ5H5RkqLdEn83OI9Kn5IMCgrRz4Z"
+  // );
 
   var graphql = JSON.stringify({
     query:
@@ -822,10 +822,10 @@ const demo_1 = async (usreName) => {
   var myHeaders = new Headers();
   myHeaders.append("referer", "https://leetcode.com/%s/pete1302");
   myHeaders.append("Content-Type", "application/json");
-  myHeaders.append(
-    "Cookie",
-    "csrftoken=2fh1J8fR3kqtgbptItZQ3tw7I92UAXxmW5VWQ5H5RkqLdEn83OI9Kn5IMCgrRz4Z"
-  );
+  // myHeaders.append(
+  //   "Cookie",
+  //   "csrftoken=2fh1J8fR3kqtgbptItZQ3tw7I92UAXxmW5VWQ5H5RkqLdEn83OI9Kn5IMCgrRz4Z"
+  // );
 
   var graphql = JSON.stringify({
     query:
