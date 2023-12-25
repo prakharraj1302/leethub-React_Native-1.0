@@ -30,7 +30,7 @@ const SearchBar = ({ refresh, setRefresh, isActive, setActive }) => {
     ToastAndroid.show(msg, ToastAndroid.SHORT);
   }
   useEffect(() => {
-    showToast("SRCH BAR", isActive.toString());
+    // showToast("SRCH BAR", isActive.toString());
   }, []);
 
   function showToast(msg) {
@@ -43,10 +43,10 @@ const SearchBar = ({ refresh, setRefresh, isActive, setActive }) => {
     var myHeaders = new Headers();
     myHeaders.append("referer", "https://leetcode.com/%s/votrubac");
     myHeaders.append("Content-Type", "application/json");
-    myHeaders.append(
-      "Cookie",
-      "csrftoken=2fh1J8fR3kqtgbptItZQ3tw7I92UAXxmW5VWQ5H5RkqLdEn83OI9Kn5IMCgrRz4Z"
-    );
+    // myHeaders.append(
+    //   "Cookie",
+    //   "csrftoken=2fh1J8fR3kqtgbptItZQ3tw7I92UAXxmW5VWQ5H5RkqLdEn83OI9Kn5IMCgrRz4Z"
+    // );
 
     var graphql = JSON.stringify({
       query:
@@ -180,7 +180,7 @@ const SearchBar = ({ refresh, setRefresh, isActive, setActive }) => {
       );
       const json = await response.json();
       if (json.hasOwnProperty("errors")) {
-        showToast("false");
+        // showToast("false");
         return false;
       }
       showToast("true");
@@ -208,30 +208,38 @@ const SearchBar = ({ refresh, setRefresh, isActive, setActive }) => {
     <View>
       <View style={styles.header}>
         <View
-          style={
-            {
-              // width: "100%",
-              // marginTop: 15,
-              // marginLeft: 15,
-              marginRight: 15,
-            }
-          }
+          style={{
+            // backgroundColor:"black",
+            // width: "100%",
+            // marginTop: 15,
+            // marginLeft: 15,
+            // padding:10,
+            // paddingBottom:20,
+            // height:"100%",
+            marginRight: 20,
+            // marginBottom:20,
+          }}
         >
           <Text style={styles.userName}>Hello Leetcoders;</Text>
           <Text style={styles.welcomeMessage}>
-            Track your friend's Submissions
+            {/* Track your friend's Submissions */}
+            Get Notified of your friend's progress
           </Text>
         </View>
         {/* <View> */}
-        <TouchableOpacity style={styles.infoBtn} onPress={addUser}>
+        <TouchableOpacity style={styles.infoBtn} >
           {/* <Text>ADD</Text> */}
-          <Image source={require('../../assets/icon.png')} resizeMode='contain' style={{flex:.9 }} />
+          <Image
+            source={require("../../assets/icon.png")}
+            resizeMode="contain"
+            style={{ flex: 0.9 }}
+          />
 
-        {/* <Image source={{ uri: '../../assets/icon.png'  }}/> */}
+          {/* <Image source={{ uri: '../../assets/icon.png'  }}/> */}
         </TouchableOpacity>
         {/* </View> */}
       </View>
-
+      <Text style={styles.info}> {">> Swipe Right for Help"} </Text>
       <SafeAreaView>
         {/* <Row>
           <Column>
@@ -253,10 +261,23 @@ const SearchBar = ({ refresh, setRefresh, isActive, setActive }) => {
           />
         </View>
         {isLoading ? (
-          <ActivityIndicator />
+          <ActivityIndicator
+            size={"large"}
+            color={"#4b9c4f"}
+            width={100}
+            style={{ size: "large" }}
+          />
         ) : (
           <TouchableOpacity style={styles.searchBtn} onPress={addUser}>
-            <Text style={{color:"ivory"}}>ADD</Text>
+            <Text
+              style={{
+                color: "ivory",
+                fontFamily: "DMRegular",
+                // fontWeight:"900",
+              }}
+            >
+              ADD
+            </Text>
           </TouchableOpacity>
         )}
       </View>
@@ -314,6 +335,13 @@ const styles = StyleSheet.create({
   //   width: "100%",
   //   marginTop: "15px",
   // },
+  info: {
+    // paddingTop:30,
+    // marginTop:40,
+    fontFamily: "DMRegular",
+    paddingLeft: 20,
+    paddingBottom: 5,
+  },
   logo: {
     height: 100,
     width: 100,
@@ -321,15 +349,25 @@ const styles = StyleSheet.create({
     // marginRight: 100,
   },
   userName: {
+    marginLeft:40,
+    // width:"70%",
     fontFamily: "DMRegular",
     fontSize: 24,
     color: "#444262",
   },
   welcomeMessage: {
     fontFamily: "DMBold",
-    fontSize: 32,
+    fontSize: 24,
     color: "#312651",
-    marginTop: 2,
+    marginLeft:40,
+    // marginRight:10,
+    // height:"100%",
+    // marginTop: 2,
+    // marginBottom:10,
+    // paddingTop:20,
+    // marginBottom:50,
+    // padding:20,
+    // paddingBottom:20,
   },
   searchContainer: {
     justifyContent: "center",
@@ -340,17 +378,28 @@ const styles = StyleSheet.create({
     marginRight: 15,
     height: 50,
   },
+  spinnerContainer: {
+    // color:"ivory",
+    width: 50,
+    height: "100%",
+    // backgroundColor: "#4b9c4f",
+    size: "large",
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   header: {
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
+    width:"90%",
     // padding
-    backgroundColor: "#00000",
-    marginTop: 20,
-    marginLeft: 15,
-    marginRight: 15,
-    marginBottom: 50,
-    height: 50,
+    // backgroundColor: "#00000",
+    // marginTop: 25,
+    // marginLeft: 15,
+    // marginRight: 15,
+    marginBottom: 15,
+    // height: 50,
   },
   searchWrapper: {
     flex: 1,
@@ -366,6 +415,10 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     paddingHorizontal: 16,
+    // margin:10,
+    borderColor: "black",
+    borderWidth: 1,
+    borderRadius: 100,
   },
   searchBtn: {
     // color:"ivory",
@@ -380,8 +433,8 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     // backgroundColor: "#00000",
-    borderColor:"#fffff",
-    borderWidth:1,
+    borderColor: "#fffff",
+    borderWidth: 1,
     borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",
