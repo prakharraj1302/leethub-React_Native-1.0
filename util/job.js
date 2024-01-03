@@ -16,6 +16,7 @@ Notifications.setNotificationHandler({
     shouldSetBadge: true,
   }),
 });
+
 const BACKGROUND_FETCH_TASK = "background-fetch";
 
 // 1. Define the task by providing a name and the function that should be executed
