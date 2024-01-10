@@ -356,7 +356,7 @@ async function schedulePushNotification(data) {
     },
     trigger: { seconds: 1 },
   });
-}
+}ex
 
 async function registerForPushNotificationsAsync() {
   let token;

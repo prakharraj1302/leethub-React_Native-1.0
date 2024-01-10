@@ -31,7 +31,8 @@
     },
     "owner": "pete1302",
     "android": {
-      "package": "com.pete1302.leethub01"
+      "package": "com.pete1302.leethub01",
+      "versionCode":2
     }
   }
 }

@@ -47,8 +47,8 @@ const Home = () => {
   const [refresh, setRefresh] = useState(true);
   const [isActive, setActive] = useState(true);
 
-  const  setActiveState = async () => {
-    await registerForPushNotificationsAsync()
+  const setActiveState = async () => {
+    await registerForPushNotificationsAsync();
     console.log("ACTIVE STATE", isActive);
   };
   // function showToast(msg) {
